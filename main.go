@@ -15,10 +15,10 @@ import (
 	"github.com/javahongxi/mockserver/recommendation"
 )
 
-const templateSuggestion = "Please make sure working directory is the root of the repository, where we have go.mod/go.sum. Suggested command line: go run mockserver/main.go"
+const templateSuggestion = "Please make sure working directory is the root of the repository, where we have go.mod/go.sum. Suggested command line: go run main.go"
 
 func main() {
-	profileTemplate, err := template.ParseFiles("mockserver/generator/profile/profile_tmpl.html")
+	profileTemplate, err := template.ParseFiles("generator/profile/profile_tmpl.html")
 	if err != nil {
 		log.Fatalf("Cannot create profile template: %v. %s", err, templateSuggestion)
 	}
@@ -27,7 +27,7 @@ func main() {
 		Recommendation: recommendation.Client{},
 	}
 
-	cityTemplate, err := template.ParseFiles("mockserver/generator/city/city_tmpl.html")
+	cityTemplate, err := template.ParseFiles("generator/city/city_tmpl.html")
 	if err != nil {
 		log.Fatalf("Cannot create city template: %v. %s", err, templateSuggestion)
 	}
@@ -36,7 +36,7 @@ func main() {
 		ProfileGen: profileGen,
 	}
 
-	cityListTemplate, err := template.ParseFiles("mockserver/generator/citylist/citylist_tmpl.html")
+	cityListTemplate, err := template.ParseFiles("generator/citylist/citylist_tmpl.html")
 	if err != nil {
 		log.Fatalf("Cannot create citylist template: %v. %s", err, templateSuggestion)
 	}
@@ -49,7 +49,7 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusTemporaryRedirect, "/static/index.html")
 	})
-	r.Static("/static", "mockserver/static")
+	r.Static("/static", "static")
 	r.GET("mock/www.zhenai.com/zhenghun", cityListGen.HandleRequest)
 	r.GET("mock/www.zhenai.com/zhenghun/:city/:page", cityGen.HandleRequest)
 	r.GET("mock/www.zhenai.com/zhenghun/:city", cityGen.HandleRequest)
